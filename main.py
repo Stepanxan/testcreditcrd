@@ -28,7 +28,7 @@ print("Результат збережено до 'result.json'")
 payment_vs_schedule_percentage_query = (
     session.query(
         deal.deal_id,
-        deal.deal_number,  # Adding deal_number
+        deal.deal_number,
         ((func.sum(deal.loan_amount) - func.sum(payment_schedule.schedule_amount)) / func.sum(deal.loan_amount)) * 100.0
     )
     .join(payment_schedule, deal.deal_id == payment_schedule.deal_id)
