@@ -1,0 +1,29 @@
+import sqlite3
+import pandas as pd
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+
+
+sqlite_conn = sqlite3.connect('task1.db')
+
+query_deal = 'SELECT * FROM deal'
+query_payment_schedule = 'SELECT * FROM payment_schedule'
+query_payment = 'SELECT * FROM payment'
+query_payment_detalizations = 'SELECT * FROM payment_detalizations'
+df1 = pd.read_sql(query_deal, sqlite_conn)
+df2 = pd.read_sql(query_payment_schedule , sqlite_conn)
+df3 = pd.read_sql(query_payment, sqlite_conn)
+df4 = pd.read_sql(query_payment_detalizations, sqlite_conn)
+
+sqlite_conn.close()
+
+
+connection_str = 'mysql+pymysql://root:19982804@localhost/task1'
+engine = create_engine(connection_str)
+session = sessionmaker(bind=engine)
+db_session = scoped_session(session)
+df1.to_sql('deal', con=connection_str, if_exists='replace', index=False)
+df2.to_sql('payment_schedule', con=connection_str, if_exists='replace', index=False)
+df3.to_sql('payment', con=connection_str, if_exists='replace', index=False)
+df4.to_sql('payment_detalizations', con=connection_str, if_exists='replace', index=False)
+
